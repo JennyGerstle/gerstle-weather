@@ -1,0 +1,40 @@
+plugins {
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+// This is the class with the main to run when the application starts.
+mainClassName = 'gerstle.weather.OpenWeatherMapApplication'
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    modules("javafx.controls", "javafx.fxml")
+}
+
+javafx {
+    version = '12'
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.mockito:mockito-core:3.8.0"
+    testImplementation "org.mockito:mockito-inline:3.8.0"
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
+}
+
+test {
+    useJUnitPlatform()
+}
