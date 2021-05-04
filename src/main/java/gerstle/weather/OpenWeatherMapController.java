@@ -16,7 +16,7 @@ public class OpenWeatherMapController<temp>
 
     WeatherJSonService service = retrofit.create(WeatherJSonService.class);
 
-    Single<OpenWeatherMapFeed> single = service.getCurrentWeather("New York");
+    Single<OpenWeatherMapFeed> single = service.getCurrentWeather("New York", "imperial");
     //no sapposed to but allowed for right now
     OpenWeatherMapFeed feed = single.blockingGet();
 
