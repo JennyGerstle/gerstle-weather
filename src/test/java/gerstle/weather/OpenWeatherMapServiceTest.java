@@ -6,19 +6,14 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import static org.junit.Assert.*;
 
-public class WeatherJSonServiceTest
+public class OpenWeatherMapServiceTest
 {
     @Test
     public void getCurrentWeather()
     {
         //given
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .build();
-
-        WeatherJSonService service = retrofit.create(WeatherJSonService.class);
+        OpenWeatherMapServiceFactory factory = new OpenWeatherMapServiceFactory();
+        OpenWeatherMapService service = factory.newInstance();
 
         //when
         //no sapposed to but allowed for right now
@@ -37,7 +32,7 @@ public class WeatherJSonServiceTest
     {
         //given
         OpenWeatherMapServiceFactory factory = new OpenWeatherMapServiceFactory();
-        WeatherJSonService service = factory.newInstance();
+        OpenWeatherMapService service = factory.newInstance();
 
         //when
         //no sapposed to but allowed for right now
@@ -49,5 +44,21 @@ public class WeatherJSonServiceTest
         assertFalse(forcast.list.isEmpty());
         assertTrue(forcast.list.get(0).dt > 0);
         assertNotNull(forcast.list.get(0).weather);
+    }
+    @Test
+    public void getWeatherForecast_getForecastFor()
+    {
+        // given
+        OpenWeatherMapServiceFactory factory = new OpenWeatherMapServiceFactory();
+        OpenWeatherMapService service = factory.newInstance();
+        OpenWeatherMapForecast forecast = service.getWeatherForecast("New York", "imperial")
+                .blockingGet();
+
+        // when
+        OpenWeatherMapForecast.HourlyForecast hourlyForecast = forecast.getForecastFor(1);
+
+        // then
+        assertNotNull(hourlyForecast);
+        assertEquals(11, hourlyForecast.getDate().getHours());
     }
 }

@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="gerstle.weather.OpenWeatherMapController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-</AnchorPane>
+<?import java.util.ArrayList?>
+<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+      <TextField id="location" text="New York">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="5.0" top="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField id="degree" text="imperial" GridPane.columnIndex="1">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="5.0" top="10.0" />
+         </GridPane.margin>
+      </TextField>
+    <Button fx:id="cast" onAction="updateForecast" text="Show Weather"GridPane.columnIndex="4" GridPane.rowIndex="0"></Button>
+
+    <ImageView id="TodayIm" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <ImageView id="TomorrowIm" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <ImageView id="day2Im" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <ImageView id="day3Im" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+    <ImageView id="day4Im" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+
+    <Label id="todayForecast" alignment="CENTER" prefHeight="18.0" prefWidth="63.0" text="0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label id="tomorrowForecast" alignment="CENTER" prefHeight="18.0" prefWidth="63.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label id="Day2Forecast" alignment="CENTER" prefHeight="18.0" prefWidth="63.0" text="0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+    <Label id="Day3Forecast" alignment="CENTER" prefHeight="18.0" prefWidth="63.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+    <Label id="Day4Forecast" alignment="CENTER" prefHeight="18.0" prefWidth="63.0" text="0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+    <fx:define>
+        <ArrayList fx:id="dForecasts" >
+            <fx:reference source="todayForecast"/>
+            <fx:reference source="tomorrowForecast"/>
+            <fx:reference source="Day2Forecast"/>
+            <fx:reference source="Day3Forecast"/>
+            <fx:reference source="Day4Forecast"/>
+        </ArrayList>
+    </fx:define>
+    <fx:define>
+        <ArrayList fx:id="iconIm" >
+            <fx:reference source="TodayIm"/>
+            <fx:reference source="TomorrowIm"/>
+            <fx:reference source="day2Im"/>
+            <fx:reference source="day3Im"/>
+            <fx:reference source="day4Im"/>
+        </ArrayList>
+    </fx:define>
+</GridPane>
