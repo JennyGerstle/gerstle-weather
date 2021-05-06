@@ -15,7 +15,7 @@ public class OpenWeatherMapApplication extends Application
         OpenWeatherMapController controller = new OpenWeatherMapController(service);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/OpenWeatherMap.fxml"));
-        loader.setController(controller);
+        //loader.setController(controller);
 
         Parent parent = loader.load();
         Scene scene = new Scene(parent, 600, 800);

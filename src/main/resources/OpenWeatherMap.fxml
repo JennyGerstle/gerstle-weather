@@ -6,18 +6,18 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.util.ArrayList?>
-<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gerstle.weather.OpenWeatherMapController">
       <TextField id="location" text="New York">
          <GridPane.margin>
             <Insets bottom="10.0" left="5.0" top="10.0" />
          </GridPane.margin>
       </TextField>
-      <TextField id="degree" text="imperial" GridPane.columnIndex="1">
+      <RadioButton id="degree" text="imperial" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets bottom="10.0" left="5.0" top="10.0" />
          </GridPane.margin>
-      </TextField>
-    <Button fx:id="cast" onAction="updateForecast" text="Show Weather"GridPane.columnIndex="4" GridPane.rowIndex="0"></Button>
+      </RadioButton>
+    <Button fx:id="cast" onAction="#updateForecast" text="Show Weather"GridPane.columnIndex="4" GridPane.rowIndex="0"></Button>
 
     <ImageView id="TodayIm" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <ImageView id="TomorrowIm" fitHeight="150" fitWidth="150" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />

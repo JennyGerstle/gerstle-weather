@@ -2,6 +2,7 @@ package gerstle.weather;
 
 import io.reactivex.rxjava3.core.Single;
 import javafx.fxml.FXML;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -33,7 +34,7 @@ public class OpenWeatherMapControllerTest
     {
         //given
         OpenWeatherMapService service = mock(OpenWeatherMapService.class);
-        OpenWeatherMapController controller = givenWeatherController();
+        OpenWeatherMapController controller = givenWeatherController(service);
         doReturn("New York").when(controller.location).getText();
         doReturn("imperial").when(controller.degree).getText();
         doReturn(Single.never()).when(service).getCurrentWeather("New York", "imperial");
@@ -45,11 +46,11 @@ public class OpenWeatherMapControllerTest
         verify(controller.degree).getText();
         verify(service).getCurrentWeather("New York", "imperial");
     }
-    public OpenWeatherMapController givenWeatherController()
+    public OpenWeatherMapController givenWeatherController(OpenWeatherMapService service)
     {
-        OpenWeatherMapController controller = new OpenWeatherMapController();
+        OpenWeatherMapController controller = new OpenWeatherMapController(service);
         controller.location = mock(TextField.class);
-        controller.degree = mock(TextField.class);
+        controller.degree = mock(RadioButton.class);
         OpenWeatherMapFeed feed = mock(OpenWeatherMapFeed.class);
 
         controller.dForecasts  = dForecasts;
