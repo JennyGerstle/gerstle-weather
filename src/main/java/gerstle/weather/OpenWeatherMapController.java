@@ -7,7 +7,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -19,7 +21,7 @@ import java.util.List;
 public class OpenWeatherMapController<temp>
 {
     @FXML
-    TextField location;
+    TextField local;
     @FXML
     RadioButton degree;
     @FXML
@@ -28,8 +30,12 @@ public class OpenWeatherMapController<temp>
     List<ImageView> iconIm;
     @FXML
     List<Label> dForecasts;
+    @FXML
+    List<Label> daysLab;
 
-    private OpenWeatherMapService service;
+    String degreeType;
+
+    OpenWeatherMapService service;
     public OpenWeatherMapController(OpenWeatherMapService service)
     {
         this.service = service;
@@ -37,30 +43,40 @@ public class OpenWeatherMapController<temp>
 
     public void initialize()
     {
-        OpenWeatherMapServiceFactory factory = new OpenWeatherMapServiceFactory();
-        OpenWeatherMapService service = factory.newInstance();
+        degree.setSelected(true);
     }
-    public void updateForecast(ActionEvent actionEvent)
+    public void updateForecast(MouseEvent event)
     {
-        Disposable disposable = service.getWeatherForecast(location.getText(), degree.getText())
-                // request the data in the background
+        if(degree.isSelected())
+        {
+            degreeType = "imperial";
+        }
+        else
+        {
+            degreeType = "metric";
+        }
+        String loc = local.getText();
+        Disposable disposable = service.getWeatherForecast(loc, degreeType)
                 .subscribeOn(Schedulers.io())
-                // work with the data in the foreground
                 .observeOn(Schedulers.trampoline())
-                // work with the feed whenever it gets downloaded
                 .subscribe(this::onWeatherForecast, this::onError);
     }
     public void onWeatherForecast(OpenWeatherMapForecast forecast)
     {
-        Platform.runLater(() -> onWeatherForecastRunL(forecast));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                onWeatherForecastRunL(forecast);
+            }
+        });
     }
     public void onWeatherForecastRunL(OpenWeatherMapForecast forecast)
     {
-        //dForecasts, iconIm;
-        for(int days = 0; days < dForecasts.size(); ++days)
+        for(int days = 0; days < dForecasts.size(); days++)
         {
-            dForecasts.get(days).setText(forecast.getForecastFor(days) + "");
-            //iconIm.get(days).setImage(OpenWeatherMapForecast.HourlyForecast.Weather.getIconURL(days));
+            daysLab.get(days).setText(forecast.getForecastFor(days).getDate().toString().substring(0, forecast.getForecastFor(days).getDate().toString().indexOf(" ")));
+            dForecasts.get(days).setText(forecast.getForecastFor(days).main.temp + "");
+            iconIm.get(days).setImage(new Image(forecast.getForecastFor(days).weather.get(0).getIconUrl()));
         }
     }
 
@@ -69,4 +85,5 @@ public class OpenWeatherMapController<temp>
         // bad but better
         throwable.printStackTrace();
     }
+
 }

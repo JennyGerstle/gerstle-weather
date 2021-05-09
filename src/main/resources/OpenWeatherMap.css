@@ -1,0 +1,7 @@
+Label.days{
+    -fx-border-width: .5;
+    -fx-border-color: black;
+    }
+GridPane{
+    -fx-background-color:thistle;
+}

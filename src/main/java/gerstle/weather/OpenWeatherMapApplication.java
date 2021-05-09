@@ -18,7 +18,7 @@ public class OpenWeatherMapApplication extends Application
         loader.setController(controller);
 
         Parent parent = loader.load();
-        Scene scene = new Scene(parent, 600, 800);
+        Scene scene = new Scene(parent, 800, 400);
 
         stage.setTitle("Weather");
         stage.setScene(scene);
