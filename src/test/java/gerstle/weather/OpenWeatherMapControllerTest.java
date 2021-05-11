@@ -6,6 +6,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.junit.Assert;
@@ -13,10 +14,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import javafx.scene.control.Label;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class OpenWeatherMapControllerTest
@@ -68,21 +73,52 @@ public class OpenWeatherMapControllerTest
     }
 
     @Test
-    public void onWeatherForecastRunL()
+    public void updateForecastCelsius()
     {
+        //given
         OpenWeatherMapController controller = givenWeatherController();
-        OpenWeatherMapForecast forecast = mock(OpenWeatherMapForecast.class);
         doReturn("New York").when(controller.local).getText();
-        doReturn(true).when(controller.degree).isSelected();
-        doReturn(Single.never()).when(controller.service).getCurrentWeather("New York","imperial");
-
+        doReturn(false).when(controller.degree).isSelected();
+        doReturn(Single.never()).when(controller.service).getWeatherForecast("New York","metric");
         //when
-        controller.onWeatherForecast(forecast);
+        controller.updateForecast(MouseEvent);
 
         //then
+        verify(controller.degree).isSelected();
+        Assert.assertEquals(controller.degreeType, "metric");
         verify(controller.local).getText();
-        verify(controller.degree).getTypeSelector();
-        verify(controller.service).getCurrentWeather("New York","imperial");
+        verify(controller.service).getWeatherForecast("New York", "metric");
+    }
+
+    @Test
+    public void onWeatherForecastRunL()
+    {
+        Date date = Calendar.getInstance().getTime();
+        OpenWeatherMapController controller = givenWeatherController();
+        OpenWeatherMapForecast forecast = mock(OpenWeatherMapForecast.class);
+        OpenWeatherMapForecast.HourlyForecast hourlyForecast = mock(OpenWeatherMapForecast.HourlyForecast.class);
+        OpenWeatherMapForecast.HourlyForecast.Main main = mock(OpenWeatherMapForecast.HourlyForecast.Main.class);
+        List<OpenWeatherMapForecast.HourlyForecast.Weather> weather = Arrays.asList(
+                mock(OpenWeatherMapForecast.HourlyForecast.Weather.class));
+
+
+        hourlyForecast.weather = weather;
+        hourlyForecast.main = main;
+        hourlyForecast.main.temp = 67;
+
+        doReturn(hourlyForecast).when(forecast).getForecastFor(anyInt());
+        doReturn(date).when(hourlyForecast).getDate();
+        doReturn("http://openweathermap.org/img/wn/10d@2x.png").when(hourlyForecast.weather.get(0)).getIconUrl();
+
+        //when
+        controller.onWeatherForecastRunL(forecast);
+
+        //then
+            String fDate = date + " ";
+            verify(daysLab.get(0)).setText(anyString());
+            verify(daysLab.get(0)).setText(fDate.substring(0, fDate.indexOf(" ")));
+            verify(dForecasts.get(0)).setText(forecast.getForecastFor(0).main.temp + "");
+            verify(iconIm.get(0)).setImage(any());
 
     }
 
