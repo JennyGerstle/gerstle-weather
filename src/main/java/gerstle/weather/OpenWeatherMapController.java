@@ -61,6 +61,7 @@ public class OpenWeatherMapController<temp>
                 .observeOn(Schedulers.trampoline())
                 .subscribe(this::onWeatherForecast, this::onError);
     }
+
     public void onWeatherForecast(OpenWeatherMapForecast forecast)
     {
         Platform.runLater(new Runnable() {
@@ -70,6 +71,7 @@ public class OpenWeatherMapController<temp>
             }
         });
     }
+
     public void onWeatherForecastRunL(OpenWeatherMapForecast forecast)
     {
         for(int days = 0; days < dForecasts.size(); days++)

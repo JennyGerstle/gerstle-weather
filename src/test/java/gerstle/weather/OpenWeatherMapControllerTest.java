@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -55,21 +56,26 @@ public class OpenWeatherMapControllerTest
         OpenWeatherMapController controller = givenWeatherController();
         doReturn("New York").when(controller.local).getText();
         doReturn(true).when(controller.degree).isSelected();
-        doReturn(Single.never()).when(controller.service).getCurrentWeather("New York","imperial");
+        doReturn(Single.never()).when(controller.service).getWeatherForecast("New York","imperial");
         //when
-        controller.updateForecast(mock(MouseEvent.class));
+        controller.updateForecast(MouseEvent);
 
         //then
+        verify(controller.degree).isSelected();
+        Assert.assertEquals(controller.degreeType, "imperial");
         verify(controller.local).getText();
-        verify(controller.degree).getTypeSelector();
-        verify(controller.service).getCurrentWeather("New York", "imperial");
+        verify(controller.service).getWeatherForecast("New York", "imperial");
     }
-    public void onWeatherForecast(OpenWeatherMapForecast forecast)
+
+    @Test
+    public void onWeatherForecastRunL()
     {
         OpenWeatherMapController controller = givenWeatherController();
+        OpenWeatherMapForecast forecast = mock(OpenWeatherMapForecast.class);
         doReturn("New York").when(controller.local).getText();
         doReturn(true).when(controller.degree).isSelected();
         doReturn(Single.never()).when(controller.service).getCurrentWeather("New York","imperial");
+
         //when
         controller.onWeatherForecast(forecast);
 
@@ -77,10 +83,6 @@ public class OpenWeatherMapControllerTest
         verify(controller.local).getText();
         verify(controller.degree).getTypeSelector();
         verify(controller.service).getCurrentWeather("New York","imperial");
-    }
-
-    public void onWeatherForecastRunL(OpenWeatherMapForecast forecast)
-    {
 
     }
 
